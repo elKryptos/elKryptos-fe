@@ -1,0 +1,573 @@
+<div class="relative min-h-screen overflow-x-hidden bg-ink-900 text-ink-100">
+
+  <!-- Ambient background -->
+  <div class="pointer-events-none fixed inset-0 -z-10 bg-grid"></div>
+  <div class="pointer-events-none fixed -top-40 left-1/2 -z-10 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-accent-500/15 blur-[120px]"></div>
+  <div class="pointer-events-none fixed bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-accent-400/10 blur-[100px]"></div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-50 border-b border-white/5 bg-ink-900/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+      <a href="#top" class="relative inline-grid font-display text-lg font-semibold tracking-tight text-ink-100">
+        <span class="invisible col-start-1 row-start-1" aria-hidden="true">&lt;Hans/elKryptos&gt;</span>
+        <span class="col-start-1 row-start-1">
+          @for (c of logoChars(); track $index) {
+            <span [class.text-accent-400]="c.accent">{{ c.char }}</span>
+          }
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex">
+        <a href="#chi-sono" class="text-sm font-medium text-ink-200 transition hover:text-accent-400">{{ copy().nav.about }}</a>
+        <a href="#competenze" class="text-sm font-medium text-ink-200 transition hover:text-accent-400">{{ copy().nav.skills }}</a>
+        <a href="#esperienza" class="text-sm font-medium text-ink-200 transition hover:text-accent-400">{{ copy().nav.experience }}</a>
+        <a href="#progetti" class="text-sm font-medium text-ink-200 transition hover:text-accent-400">{{ copy().nav.projects }}</a>
+        <a href="#contatti" class="text-sm font-medium text-ink-200 transition hover:text-accent-400">{{ copy().nav.contact }}</a>
+      </nav>
+
+      <div class="hidden items-center gap-4 md:flex">
+        <div class="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+          @for (l of langs; track l.code) {
+            <button
+              type="button"
+              (click)="setLang(l.code)"
+              class="rounded-full px-2.5 py-1 font-mono text-xs font-medium transition"
+              [class.bg-accent-500]="lang() === l.code"
+              [class.text-ink-950]="lang() === l.code"
+              [class.text-ink-400]="lang() !== l.code"
+            >
+              {{ l.label }}
+            </button>
+          }
+        </div>
+
+        <a
+          href="Hans-De-la-Cruz-CV.pdf"
+          download
+          class="inline-flex items-center gap-2 rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-ink-950 transition hover:bg-accent-400"
+        >
+          {{ copy().nav.downloadCv }}
+        </a>
+      </div>
+
+      <div class="flex items-center gap-2 md:hidden">
+        <div class="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+          @for (l of langs; track l.code) {
+            <button
+              type="button"
+              (click)="setLang(l.code)"
+              class="rounded-full px-2.5 py-1 font-mono text-xs font-medium transition"
+              [class.bg-accent-500]="lang() === l.code"
+              [class.text-ink-950]="lang() === l.code"
+              [class.text-ink-400]="lang() !== l.code"
+            >
+              {{ l.label }}
+            </button>
+          }
+        </div>
+
+        <!-- Mobile menu button -->
+        <button
+          type="button"
+          class="inline-flex items-center justify-center rounded-lg border border-white/10 p-2 text-ink-100"
+          (click)="toggleMenu()"
+          aria-label="Apri il menu"
+        >
+          @if (mobileMenuOpen()) {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu panel -->
+    @if (mobileMenuOpen()) {
+      <nav class="border-t border-white/5 bg-ink-900 px-5 py-4 md:hidden">
+        <div class="flex flex-col gap-1">
+          <a (click)="closeMenu()" href="#chi-sono" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.about }}</a>
+          <a (click)="closeMenu()" href="#competenze" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.skills }}</a>
+          <a (click)="closeMenu()" href="#esperienza" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.experience }}</a>
+          <a (click)="closeMenu()" href="#progetti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.projects }}</a>
+          <a (click)="closeMenu()" href="#contatti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.contact }}</a>
+
+          <a
+            (click)="closeMenu()"
+            href="Hans-De-la-Cruz-CV.pdf"
+            download
+            class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-ink-950"
+          >
+            {{ copy().nav.downloadCv }}
+          </a>
+        </div>
+      </nav>
+    }
+  </header>
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="mx-auto flex max-w-6xl flex-col items-center px-5 pb-16 pt-16 text-center sm:px-8 sm:pt-24">
+      <div class="animate-fade-up inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-xs font-medium text-accent-300">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-400"></span>
+        </span>
+        {{ copy().hero.badge }}
+      </div>
+
+      <h1 class="animate-fade-up mt-6 font-display text-4xl font-bold leading-tight tracking-tight text-ink-100 sm:text-5xl md:text-6xl" style="animation-delay: 0.05s">
+        Hans De la Cruz
+      </h1>
+
+      <p class="animate-fade-up mt-4 max-w-2xl text-lg text-ink-200 sm:text-xl" style="animation-delay: 0.1s">
+        {{ copy().hero.tagline }}
+      </p>
+
+      <div class="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row" style="animation-delay: 0.15s">
+        <a
+          href="#contatti"
+          class="inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-lg shadow-accent-500/20 transition hover:bg-accent-400"
+        >
+          {{ copy().hero.ctaContact }}
+        </a>
+        <a
+          href="Hans-De-la-Cruz-CV.pdf"
+          download
+          class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-ink-100 transition hover:border-accent-400/40 hover:text-accent-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" />
+          </svg>
+          {{ copy().hero.ctaCv }}
+        </a>
+      </div>
+
+      <div class="animate-fade-up mt-8 flex items-center gap-5" style="animation-delay: 0.2s">
+        <a href="https://github.com/elKryptos" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-ink-400 transition hover:text-accent-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.75.4-1.25.73-1.53-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5Z"/>
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/in/hansdelacruz/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-ink-400 transition hover:text-accent-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/>
+          </svg>
+        </a>
+        <a href="mailto:sidney1243@gmail.com" aria-label="Email" class="text-ink-400 transition hover:text-accent-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="m3.5 6.5 8.5 6 8.5-6" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Quick stack strip -->
+      <div class="animate-fade-up mt-14 flex w-full max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3 opacity-80" style="animation-delay: 0.25s">
+        <span class="font-mono text-xs tracking-wide text-ink-400">{{ copy().hero.stackLabel }}</span>
+        <span class="font-mono text-sm text-ink-200">Java</span>
+        <span class="font-mono text-sm text-ink-200">Spring Boot</span>
+        <span class="font-mono text-sm text-ink-200">Docker</span>
+        <span class="font-mono text-sm text-ink-200">Angular</span>
+        <span class="font-mono text-sm text-ink-200">Tailwind CSS</span>
+        <span class="font-mono text-sm text-ink-200">MariaDB</span>
+      </div>
+    </section>
+
+    <!-- Chi sono -->
+    <section id="chi-sono" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="grid gap-12 md:grid-cols-5 md:gap-16">
+        <div class="md:col-span-3">
+          <p class="font-mono text-sm text-accent-400">{{ copy().about.eyebrow }}</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().about.title }}</h2>
+          <div class="mt-6 space-y-4 text-base leading-relaxed text-ink-200">
+            <p>{{ copy().about.p1 }}</p>
+            <p>{{ copy().about.p2 }}</p>
+            <p>{{ copy().about.p3 }}</p>
+          </div>
+        </div>
+
+        <div class="md:col-span-2">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <dl class="space-y-5">
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-sm text-ink-400">{{ copy().about.factsRole }}</dt>
+                <dd class="text-right text-sm font-medium text-ink-100">{{ copy().about.factsRoleValue }}</dd>
+              </div>
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-sm text-ink-400">{{ copy().about.factsLocation }}</dt>
+                <dd class="text-right text-sm font-medium text-ink-100">{{ copy().about.factsLocationValue }}</dd>
+              </div>
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-sm text-ink-400">{{ copy().about.factsFocus }}</dt>
+                <dd class="text-right text-sm font-medium text-ink-100">{{ copy().about.factsFocusValue }}</dd>
+              </div>
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-sm text-ink-400">{{ copy().about.factsEducation }}</dt>
+                <dd class="text-right text-sm font-medium text-ink-100">{{ copy().about.factsEducationValue }}</dd>
+              </div>
+              <div class="border-t border-white/10 pt-5">
+                <dt class="text-sm text-ink-400">{{ copy().about.languagesTitle }}</dt>
+                <dd class="mt-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-ink-200">Español</span>
+                    <span class="font-mono text-xs text-accent-400">{{ copy().about.langNative }}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-ink-200">Italiano</span>
+                    <span class="font-mono text-xs text-accent-400">C2</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-ink-200">English</span>
+                    <span class="font-mono text-xs text-accent-400">C1</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-ink-200">Français</span>
+                    <span class="font-mono text-xs text-accent-400">A2</span>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Competenze -->
+    <section id="competenze" class="scroll-mt-20 border-t border-white/5 bg-ink-850/60 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="mx-auto max-w-6xl">
+        <p class="font-mono text-sm text-accent-400">{{ copy().skills.eyebrow }}</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().skills.title }}</h2>
+        <p class="mt-4 max-w-2xl text-base text-ink-200">{{ copy().skills.subtitle }}</p>
+
+        <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+          <div class="rounded-2xl border border-accent-500/20 bg-gradient-to-b from-accent-500/10 to-transparent p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/15 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 0 0-2 2v4m18 0V5a2 2 0 0 0-2-2h-4m0 18h4a2 2 0 0 0 2-2v-4M3 15v4a2 2 0 0 0 2 2h4"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.backendTitle }}</h3>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Java', 'Spring Boot', 'REST API', 'JAX-RS', 'Microservizi', 'JWT', 'Signed URL', 'MapStruct', 'Lombok']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="8" ry="3"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.dbTitle }}</h3>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Oracle Database', 'MySQL', 'MariaDB', 'DynamoDB', 'Redis']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 12a8 8 0 1 1-3-6.24M20 4v5h-5"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.devopsTitle }}</h3>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Docker', 'Docker Compose', 'NGINX', 'VPS', 'RustFS / MinIO (S3)', 'Splunk', 'VMware Aria']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m8 4-4 8 4 8m8-16 4 8-4 8M12 4l-2 16"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.frontendTitle }}</h3>
+            </div>
+            <p class="mt-2 text-xs text-ink-400">{{ copy().skills.frontendNote }}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Angular', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'PrimeNG', 'Bootstrap']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.architectureTitle }}</h3>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Microservizi', 'API Gateway (Zuul)', 'DTO', 'DAO', 'Command Pattern', 'Async / Scheduled Tasks']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().skills.toolsTitle }}</h3>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['AWS Cognito', 'AWS DynamoDB', 'Jira', 'Git', 'Postman', 'Kafka']; track skill) {
+                <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Esperienza -->
+    <section id="esperienza" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
+      <p class="font-mono text-sm text-accent-400">{{ copy().experience.eyebrow }}</p>
+      <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().experience.title }}</h2>
+
+      <ol class="mt-12 space-y-10 border-l border-white/10 pl-6 sm:pl-10">
+
+        @for (item of copy().experience.items; track item.role; let idx = $index) {
+          <li class="relative">
+            <span
+              class="absolute -left-[31px] top-1 h-3 w-3 rounded-full ring-4 sm:-left-[47px]"
+              [class.bg-accent-400]="idx < 2"
+              [class.ring-accent-400/20]="idx < 2"
+              [class.bg-ink-400]="idx >= 2"
+              [class.ring-ink-400/10]="idx >= 2"
+            ></span>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="font-display text-lg font-semibold text-ink-100">
+                {{ item.role }}
+                @if (item.company) {
+                  <span class="font-normal text-ink-400">{{ item.company }}</span>
+                }
+              </h3>
+              <span
+                class="rounded-full px-3 py-0.5 font-mono text-xs"
+                [class.bg-accent-500/15]="idx < 2"
+                [class.text-accent-300]="idx < 2"
+                [class.bg-white/5]="idx >= 2"
+                [class.text-ink-300]="idx >= 2"
+              >
+                {{ item.period }}
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-ink-400">{{ item.location }}</p>
+            @if (item.bullets) {
+              <ul class="mt-3 list-inside list-disc space-y-1.5 text-sm leading-relaxed text-ink-200">
+                @for (bullet of item.bullets; track bullet) {
+                  <li>{{ bullet }}</li>
+                }
+              </ul>
+            }
+            @if (item.description) {
+              <p class="mt-3 text-sm leading-relaxed text-ink-200">{{ item.description }}</p>
+            }
+          </li>
+        }
+
+      </ol>
+    </section>
+
+    <!-- Progetti -->
+    <section id="progetti" class="scroll-mt-20 border-t border-white/5 bg-ink-850/60 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="mx-auto max-w-6xl">
+        <p class="font-mono text-sm text-accent-400">{{ copy().projects.eyebrow }}</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().projects.title }}</h2>
+        <p class="mt-4 max-w-2xl text-base text-ink-200">{{ copy().projects.subtitle }}</p>
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-5">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/70 p-6 lg:col-span-3">
+            <h3 class="font-display text-base font-semibold text-accent-300">{{ copy().projects.archBackendTitle }}</h3>
+            <ul class="mt-3 list-inside list-disc space-y-1.5 text-sm leading-relaxed text-ink-200">
+              @for (bullet of copy().projects.archBullets; track bullet) {
+                <li>{{ bullet }}</li>
+              }
+            </ul>
+
+            <h3 class="mt-6 font-display text-base font-semibold text-accent-300">{{ copy().projects.devopsTitle }}</h3>
+            <ul class="mt-3 list-inside list-disc space-y-1.5 text-sm leading-relaxed text-ink-200">
+              @for (bullet of copy().projects.devopsBullets; track bullet) {
+                <li>{{ bullet }}</li>
+              }
+            </ul>
+          </div>
+
+          <div class="rounded-2xl border border-accent-500/20 bg-gradient-to-b from-accent-500/10 to-transparent p-6 lg:col-span-2">
+            <h3 class="font-display text-base font-semibold text-ink-100">{{ copy().projects.stackTitle }}</h3>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @for (skill of ['Java', 'Spring Boot', 'REST API', 'JWT', 'MapStruct', 'Lombok', '@Async', '@Scheduled', 'Angular', 'TypeScript', 'Tailwind CSS', 'PrimeNG', 'RustFS', 'MariaDB', 'Redis', 'Docker', 'Docker Compose', 'NGINX']; track skill) {
+                <span class="rounded-full border border-white/10 bg-ink-900/60 px-3 py-1 text-xs font-medium text-ink-200">{{ skill }}</span>
+              }
+            </div>
+
+            <div class="mt-6 rounded-xl border border-white/10 bg-ink-950/60 p-4 font-mono text-xs leading-relaxed text-ink-400">
+              <p><span class="text-accent-400">$</span> docker compose up -d</p>
+              <p class="mt-1">✔ backend</p>
+              <p>✔ storage (RustFS)</p>
+              <p>✔ database (MariaDB)</p>
+              <p>✔ reverse-proxy (NGINX)</p>
+            </div>
+
+            <a href="https://github.com/elKryptos" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent-400 hover:text-accent-300">
+              {{ copy().projects.moreLink }}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Progetto in sviluppo: ballo -->
+        <div class="mt-6 rounded-2xl border border-white/10 bg-ink-800/60 p-6 sm:p-8">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/15 text-accent-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v5m0 0-4 6m4-6 4 6m-7-9-3 3m10-3 3 3"/>
+                </svg>
+              </div>
+              <h3 class="font-display text-lg font-semibold text-ink-100">{{ copy().projects.danceTitle }}</h3>
+            </div>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-accent-500/30 bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-300">
+              <span class="relative flex h-1.5 w-1.5">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75"></span>
+                <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+              </span>
+              {{ copy().projects.danceBadge }}
+            </span>
+          </div>
+          <p class="mt-4 max-w-3xl text-sm leading-relaxed text-ink-200">{{ copy().projects.danceParagraph }}</p>
+          <p class="mt-2 max-w-3xl text-xs text-ink-400">{{ copy().projects.danceNote }}</p>
+          <a
+            href="https://ballastasera.it"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent-400 hover:text-accent-300"
+          >
+            ballastasera.it
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contatti -->
+    <section id="contatti" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-ink-800 to-ink-850 px-6 py-14 text-center sm:px-12">
+        <p class="font-mono text-sm text-accent-400">{{ copy().contact.eyebrow }}</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().contact.title }}</h2>
+        <p class="mx-auto mt-4 max-w-xl text-base text-ink-200">{{ copy().contact.subtitle }}</p>
+
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          @if (emailRevealed()) {
+            <a
+              href="mailto:sidney1243@gmail.com"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-lg shadow-accent-500/20 transition hover:bg-accent-400 sm:w-auto"
+            >
+              {{ copy().contact.emailCta }}
+            </a>
+          } @else {
+            <button
+              type="button"
+              (click)="revealEmail()"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-lg shadow-accent-500/20 transition hover:bg-accent-400 sm:w-auto"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3.5 6.5 8.5 6 8.5-6" />
+              </svg>
+              {{ copy().contact.showEmail }}
+            </button>
+          }
+          <a
+            href="https://www.linkedin.com/in/hansdelacruz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-ink-100 transition hover:border-accent-400/40 hover:text-accent-300 sm:w-auto"
+          >
+            {{ copy().contact.linkedinCta }}
+          </a>
+        </div>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-400">
+          @if (phoneRevealed()) {
+            <a href="tel:+393279959496" class="inline-flex items-center gap-1.5 text-accent-300 transition hover:text-accent-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+              </svg>
+              +39 327 995 9496
+            </a>
+          } @else {
+            <button
+              type="button"
+              (click)="revealPhone()"
+              class="inline-flex items-center gap-1.5 transition hover:text-accent-400"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              {{ copy().contact.showPhone }}
+            </button>
+          }
+          <span class="inline-flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.13-7-11.5A7 7 0 0 1 19 9.5C19 14.87 12 21 12 21Z"/>
+              <circle cx="12" cy="9.5" r="2.3"/>
+            </svg>
+            {{ copy().contact.location }}
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.75.4-1.25.73-1.53-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5Z"/>
+            </svg>
+            github.com/elKryptos
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-white/5 px-5 py-8 sm:px-8">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-ink-400 sm:flex-row">
+      <p>&copy; {{ currentYear }} Hans De la Cruz. {{ copy().footer.rights }}</p>
+      <p class="font-mono">{{ copy().footer.builtWith }}</p>
+    </div>
+  </footer>
+
+</div>
