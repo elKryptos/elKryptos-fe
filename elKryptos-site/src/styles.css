@@ -86,23 +86,48 @@ header.scrolled {
   transition: background 0.15s ease;
 }
 
-/* Infinite marquee for the stack strip */
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 22s linear infinite;
+/* Draggable/swipeable auto-scrolling stack strip */
+.marquee-viewport {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
 }
 
-.marquee-track:hover {
-  animation-play-state: paused;
+.marquee-viewport::-webkit-scrollbar {
+  display: none;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
+.marquee-viewport.dragging {
+  cursor: grabbing;
+}
+
+/* Animated hamburger -> X icon */
+.hamburger-bar {
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger-bar-top.is-open {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger-bar-middle.is-open {
+  opacity: 0;
+}
+
+.hamburger-bar-bottom.is-open {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Blinking terminal cursor */
+.terminal-cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
   }
 }
 

@@ -25,7 +25,10 @@ interface Copy {
     downloadCv: string;
   };
   hero: {
-    badge: string;
+    lastCommit: string;
+    checkingCommit: string;
+    githubUnavailable: string;
+    travelLocation: string;
     tagline: string;
     ctaContact: string;
     ctaCv: string;
@@ -107,7 +110,10 @@ export const translations: Record<Lang, Copy> = {
       downloadCv: 'Scarica CV',
     },
     hero: {
-      badge: 'Disponibile per nuove opportunità · Milano, Italia',
+      lastCommit: 'Ultimo commit',
+      checkingCommit: 'verifico ultimo commit su GitHub…',
+      githubUnavailable: 'GitHub non raggiungibile al momento',
+      travelLocation: 'In viaggio · Kyiv, Ucraina',
       tagline:
         "Full Stack Developer con il cuore nel backend. Costruisco API, microservizi e architetture solide — il frontend lo curo volentieri, spesso con una mano dall'AI per la parte grafica.",
       ctaContact: 'Contattami',
@@ -265,7 +271,10 @@ export const translations: Record<Lang, Copy> = {
       downloadCv: 'Download CV',
     },
     hero: {
-      badge: 'Available for new opportunities · Milan, Italy',
+      lastCommit: 'Last commit',
+      checkingCommit: 'checking latest commit on GitHub…',
+      githubUnavailable: 'GitHub unreachable right now',
+      travelLocation: 'Traveling · Kyiv, Ukraine',
       tagline:
         "Full Stack Developer at heart a backend engineer. I build APIs, microservices and solid architectures — I'm happy to handle the frontend too, often with a hand from AI on the visual side.",
       ctaContact: 'Get in touch',
@@ -423,7 +432,10 @@ export const translations: Record<Lang, Copy> = {
       downloadCv: 'Descargar CV',
     },
     hero: {
-      badge: 'Disponible para nuevas oportunidades · Milán, Italia',
+      lastCommit: 'Último commit',
+      checkingCommit: 'comprobando el último commit en GitHub…',
+      githubUnavailable: 'GitHub no disponible en este momento',
+      travelLocation: 'De viaje · Kiev, Ucrania',
       tagline:
         'Full Stack Developer de corazón backend. Construyo APIs, microservicios y arquitecturas sólidas — el frontend también lo cuido con gusto, muchas veces con una ayuda de la IA en la parte gráfica.',
       ctaContact: 'Contáctame',
