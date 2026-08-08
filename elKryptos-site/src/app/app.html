@@ -1,13 +1,19 @@
 <div class="relative min-h-screen overflow-x-hidden bg-ink-900 text-ink-100">
 
+  <!-- Scroll progress bar -->
+  <div class="fixed inset-x-0 top-0 z-60 h-0.5 bg-transparent">
+    <div class="h-full bg-linear-to-r from-accent-500 via-accent-400 to-accent-300 transition-[width] duration-150" [style.width.%]="scrollProgress()"></div>
+  </div>
+
   <!-- Ambient background -->
   <div class="pointer-events-none fixed inset-0 -z-10 bg-grid"></div>
-  <div class="pointer-events-none fixed -top-40 left-1/2 -z-10 h-144 w-xl -translate-x-1/2 rounded-full bg-accent-500/15 blur-[120px]"></div>
-  <div class="pointer-events-none fixed bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-accent-400/10 blur-[100px]"></div>
+  <div class="pointer-events-none fixed inset-0 -z-10 bg-noise"></div>
+  <div class="gsap-parallax pointer-events-none fixed -top-40 left-1/2 -z-10 h-144 w-xl -translate-x-1/2 rounded-full bg-accent-500/15 blur-[120px]" data-speed="0.2"></div>
+  <div class="gsap-parallax pointer-events-none fixed bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-accent-400/10 blur-[100px]" data-speed="-0.15"></div>
 
   <!-- Header / Nav -->
-  <header class="sticky top-0 z-50 border-b border-white/5 bg-ink-900/80 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-ink-900/80 backdrop-blur-md transition-[background-color,box-shadow] duration-300" [class.scrolled]="scrolled()">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-2 sm:px-8">
       <a href="#top" class="relative inline-grid font-display text-lg font-semibold tracking-tight text-ink-100">
         <span class="invisible col-start-1 row-start-1" aria-hidden="true">&lt;Hans/elKryptos&gt;</span>
         <span class="col-start-1 row-start-1">
@@ -86,34 +92,52 @@
       </div>
     </div>
 
-    <!-- Mobile menu panel -->
-    @if (mobileMenuOpen()) {
-      <nav class="border-t border-white/5 bg-ink-900 px-5 py-4 md:hidden">
-        <div class="flex flex-col gap-1">
-          <a (click)="closeMenu()" href="#chi-sono" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.about }}</a>
-          <a (click)="closeMenu()" href="#competenze" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.skills }}</a>
-          <a (click)="closeMenu()" href="#esperienza" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.experience }}</a>
-          <a (click)="closeMenu()" href="#progetti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.projects }}</a>
-          <a (click)="closeMenu()" href="#contatti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.contact }}</a>
+    <!-- Mobile menu backdrop -->
+    <div
+      class="fixed inset-0 z-40 bg-ink-950/70 backdrop-blur-sm transition-opacity duration-300 md:hidden"
+      [class.opacity-100]="mobileMenuOpen()"
+      [class.pointer-events-auto]="mobileMenuOpen()"
+      [class.opacity-0]="!mobileMenuOpen()"
+      [class.pointer-events-none]="!mobileMenuOpen()"
+      (click)="closeMenu()"
+      aria-hidden="true"
+    ></div>
 
-          <a
-            (click)="closeMenu()"
-            href="Hans-De-la-Cruz-CV.pdf"
-            download
-            class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-ink-950"
-          >
-            {{ copy().nav.downloadCv }}
-          </a>
-        </div>
-      </nav>
-    }
+    <!-- Mobile menu panel: overlays content instead of pushing it down -->
+    <nav
+      class="absolute inset-x-0 top-full z-40 origin-top border-t border-white/5 bg-ink-900/95 px-5 py-4 shadow-2xl backdrop-blur-md transition-all duration-300 md:hidden"
+      [class.opacity-100]="mobileMenuOpen()"
+      [class.translate-y-0]="mobileMenuOpen()"
+      [class.pointer-events-auto]="mobileMenuOpen()"
+      [class.opacity-0]="!mobileMenuOpen()"
+      [class.-translate-y-2]="!mobileMenuOpen()"
+      [class.pointer-events-none]="!mobileMenuOpen()"
+      [attr.inert]="!mobileMenuOpen() ? '' : null"
+    >
+      <div class="flex flex-col gap-1">
+        <a (click)="closeMenu()" href="#chi-sono" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.about }}</a>
+        <a (click)="closeMenu()" href="#competenze" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.skills }}</a>
+        <a (click)="closeMenu()" href="#esperienza" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.experience }}</a>
+        <a (click)="closeMenu()" href="#progetti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.projects }}</a>
+        <a (click)="closeMenu()" href="#contatti" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-200 hover:bg-white/5 hover:text-accent-400">{{ copy().nav.contact }}</a>
+
+        <a
+          (click)="closeMenu()"
+          href="Hans-De-la-Cruz-CV.pdf"
+          download
+          class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-ink-950"
+        >
+          {{ copy().nav.downloadCv }}
+        </a>
+      </div>
+    </nav>
   </header>
 
-  <main id="top">
+  <main id="top" class="pt-20">
 
     <!-- Hero -->
-    <section class="mx-auto flex max-w-6xl flex-col items-center px-5 pb-16 pt-16 text-center sm:px-8 sm:pt-24">
-      <div class="animate-fade-up inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-xs font-medium text-accent-300">
+    <section id="hero-spotlight" class="mx-auto flex max-w-6xl flex-col items-center px-5 pb-16 pt-16 text-center sm:px-8 sm:pt-24">
+      <div id="hero-badge" class="inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-xs font-medium text-accent-300">
         <span class="relative flex h-2 w-2">
           <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75"></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-400"></span>
@@ -121,15 +145,15 @@
         {{ copy().hero.badge }}
       </div>
 
-      <h1 class="animate-fade-up mt-6 font-display text-4xl font-bold leading-tight tracking-tight text-ink-100 sm:text-5xl md:text-6xl" style="animation-delay: 0.05s">
+      <h1 id="hero-title" class="text-gradient mt-6 font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
         Hans De la Cruz
       </h1>
 
-      <p class="animate-fade-up mt-4 max-w-2xl text-lg text-ink-200 sm:text-xl" style="animation-delay: 0.1s">
+      <p id="hero-tagline" class="mt-4 max-w-2xl text-lg text-ink-200 sm:text-xl">
         {{ copy().hero.tagline }}
       </p>
 
-      <div class="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row" style="animation-delay: 0.15s">
+      <div id="hero-ctas" class="mt-8 flex flex-col gap-3 sm:flex-row">
         <a
           href="#contatti"
           class="inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-950 shadow-lg shadow-accent-500/20 transition hover:bg-accent-400"
@@ -148,7 +172,7 @@
         </a>
       </div>
 
-      <div class="animate-fade-up mt-8 flex items-center gap-5" style="animation-delay: 0.2s">
+      <div id="hero-socials" class="mt-8 flex items-center gap-5">
         <a href="https://github.com/elKryptos" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-ink-400 transition hover:text-accent-400">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.95.1-.75.4-1.25.73-1.53-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5Z"/>
@@ -168,20 +192,26 @@
       </div>
 
       <!-- Quick stack strip -->
-      <div class="animate-fade-up mt-14 flex w-full max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3 opacity-80" style="animation-delay: 0.25s">
-        <span class="font-mono text-xs tracking-wide text-ink-400">{{ copy().hero.stackLabel }}</span>
-        <span class="font-mono text-sm text-ink-200">Java</span>
-        <span class="font-mono text-sm text-ink-200">Spring Boot</span>
-        <span class="font-mono text-sm text-ink-200">Docker</span>
-        <span class="font-mono text-sm text-ink-200">Angular</span>
-        <span class="font-mono text-sm text-ink-200">Tailwind CSS</span>
-        <span class="font-mono text-sm text-ink-200">MariaDB</span>
+      <div id="hero-stack" class="relative mt-14 w-full max-w-3xl overflow-hidden opacity-80 mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div class="marquee-track items-center gap-8">
+          @for (group of [0, 1]; track group) {
+            <div class="flex shrink-0 items-center gap-8 pr-8">
+              <span class="font-mono text-xs tracking-wide text-ink-400">{{ copy().hero.stackLabel }}</span>
+              <span class="font-mono text-sm text-ink-200">Java</span>
+              <span class="font-mono text-sm text-ink-200">Spring Boot</span>
+              <span class="font-mono text-sm text-ink-200">Docker</span>
+              <span class="font-mono text-sm text-ink-200">Angular</span>
+              <span class="font-mono text-sm text-ink-200">Tailwind CSS</span>
+              <span class="font-mono text-sm text-ink-200">MariaDB</span>
+            </div>
+          }
+        </div>
       </div>
     </section>
 
     <!-- Chi sono -->
     <section id="chi-sono" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
-      <div class="grid gap-12 md:grid-cols-5 md:gap-16">
+      <div class="gsap-reveal grid gap-12 md:grid-cols-5 md:gap-16">
         <div class="md:col-span-3">
           <p class="font-mono text-sm text-accent-400">{{ copy().about.eyebrow }}</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().about.title }}</h2>
@@ -193,7 +223,7 @@
         </div>
 
         <div class="md:col-span-2">
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <dl class="space-y-5">
               <div class="flex items-start justify-between gap-4">
                 <dt class="text-sm text-ink-400">{{ copy().about.factsRole }}</dt>
@@ -245,9 +275,9 @@
         <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().skills.title }}</h2>
         <p class="mt-4 max-w-2xl text-base text-ink-200">{{ copy().skills.subtitle }}</p>
 
-        <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="gsap-stagger mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-          <div class="rounded-2xl border border-accent-500/20 bg-linear-to-b from-accent-500/10 to-transparent p-6">
+          <div class="rounded-2xl border border-accent-500/20 bg-linear-to-b from-accent-500/10 to-transparent p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/15 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -263,7 +293,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -280,7 +310,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -296,7 +326,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -313,7 +343,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -329,7 +359,7 @@
             </div>
           </div>
 
-          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-accent-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -351,10 +381,10 @@
 
     <!-- Esperienza -->
     <section id="esperienza" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
-      <p class="font-mono text-sm text-accent-400">{{ copy().experience.eyebrow }}</p>
+      <p class="gsap-reveal font-mono text-sm text-accent-400">{{ copy().experience.eyebrow }}</p>
       <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().experience.title }}</h2>
 
-      <ol class="mt-12 space-y-10 border-l border-white/10 pl-6 sm:pl-10">
+      <ol class="gsap-stagger mt-12 space-y-10 border-l border-white/10 pl-6 sm:pl-10">
 
         @for (item of copy().experience.items; track item.role; let idx = $index) {
           <li class="relative">
@@ -406,8 +436,8 @@
         <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().projects.title }}</h2>
         <p class="mt-4 max-w-2xl text-base text-ink-200">{{ copy().projects.subtitle }}</p>
 
-        <div class="mt-10 grid gap-6 lg:grid-cols-5">
-          <div class="rounded-2xl border border-white/10 bg-ink-800/70 p-6 lg:col-span-3">
+        <div class="gsap-stagger mt-10 grid gap-6 lg:grid-cols-5">
+          <div class="rounded-2xl border border-white/10 bg-ink-800/70 p-6 gsap-card lg:col-span-3">
             <h3 class="font-display text-base font-semibold text-accent-300">{{ copy().projects.archBackendTitle }}</h3>
             <ul class="mt-3 list-inside list-disc space-y-1.5 text-sm leading-relaxed text-ink-200">
               @for (bullet of copy().projects.archBullets; track bullet) {
@@ -423,7 +453,7 @@
             </ul>
           </div>
 
-          <div class="rounded-2xl border border-accent-500/20 bg-linear-to-b from-accent-500/10 to-transparent p-6 lg:col-span-2">
+          <div class="rounded-2xl border border-accent-500/20 bg-linear-to-b from-accent-500/10 to-transparent p-6 gsap-card lg:col-span-2">
             <h3 class="font-display text-base font-semibold text-ink-100">{{ copy().projects.stackTitle }}</h3>
             <div class="mt-4 flex flex-wrap gap-2">
               @for (skill of ['Java', 'Spring Boot', 'REST API', 'JWT', 'MapStruct', 'Lombok', '@Async', '@Scheduled', 'Angular', 'TypeScript', 'Tailwind CSS', 'PrimeNG', 'RustFS', 'MariaDB', 'Redis', 'Docker', 'Docker Compose', 'NGINX']; track skill) {
@@ -449,7 +479,7 @@
         </div>
 
         <!-- Progetto in sviluppo: ballo -->
-        <div class="mt-6 rounded-2xl border border-white/10 bg-ink-800/60 p-6 sm:p-8">
+        <div class="gsap-reveal mt-6 rounded-2xl border border-white/10 bg-ink-800/60 p-6 gsap-card sm:p-8">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/15 text-accent-400">
@@ -487,7 +517,7 @@
 
     <!-- Contatti -->
     <section id="contatti" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-24">
-      <div class="overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-ink-800 to-ink-850 px-6 py-14 text-center sm:px-12">
+      <div class="gsap-reveal overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-ink-800 to-ink-850 px-6 py-14 text-center sm:px-12">
         <p class="font-mono text-sm text-accent-400">{{ copy().contact.eyebrow }}</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-ink-100 sm:text-4xl">{{ copy().contact.title }}</h2>
         <p class="mx-auto mt-4 max-w-xl text-base text-ink-200">{{ copy().contact.subtitle }}</p>
